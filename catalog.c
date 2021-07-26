@@ -41,7 +41,12 @@ void main()
             int i;
             memset(buffer, 0, 255);
             fgets(buffer, 255, stdin);
-            i = atoi(buffer);
+            while (!isdigit(buffer[0])) 
+            {
+                printf("num: ");
+                fgets(buffer, 255, stdin);
+            }
+            i = atoi(&buffer[0]);
             if (i < 0 || i > 10)
             {
                 printf("error\n");
@@ -76,7 +81,6 @@ void main()
                     }
                 }
                 buff[5] == '\0';
-                printf("number: %s\n", buff);
                 my_catalog[i].number = atoi(buff);
             }
         }
@@ -85,11 +89,14 @@ void main()
         {
             printf("DELETE\n");
             printf("num: ");
-            char buff[11] = {};
             int i;
-            fgets(buff, 255, stdin);
-            if (buff[10] != '\n' && buff[9] != '\0') fgets(buffer, 255, stdin);
-            i = atoi(buff);
+            fgets(buffer, 255, stdin);
+            while (!isdigit(buffer[0])) 
+            {
+                printf("num: ");
+                fgets(buffer, 255, stdin);
+            }
+            i = atoi(&buffer[0]);
             if (i < 0 || i > 10)
             {
                 printf("error\n");
