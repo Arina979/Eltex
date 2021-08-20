@@ -18,12 +18,12 @@ void *customer(void *args)
         int i = rand_r((unsigned int *)&copy) % 4;
         pthread_spin_lock(&lock);
         demand += shops[i];
-        printf("cust %lu shop %d: %d\n", seed, i, shops[i]);
         shops[i] = 0;
+        printf("cust %lu shop %d: %d\n", seed, i, demand);
         pthread_spin_unlock(&lock);
         sleep(2);
     }
-    printf("cust %lu: %d\n", seed, demand);
+    printf("cust %lu %d\n", seed, demand);
     pthread_exit(0);
 }
 
@@ -77,6 +77,7 @@ int main()
         pthread_join(cust[k], NULL);
 
     pthread_cancel(prov);
+    pthread_join(prov, NULL);
 
     pthread_spin_destroy(&lock);
 
