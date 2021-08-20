@@ -1,4 +1,4 @@
-BIN := main
+BIN := pthread
 SOURCES := *.c
 HEADERS := 
 CC := gcc
