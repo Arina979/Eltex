@@ -35,7 +35,6 @@ void main()
             {
                 execl("/bin/ps", "ps", (char *)0);
             }
-            exit(0);
         default:
             pid = wait(NULL);
             if (pid == -1) 
