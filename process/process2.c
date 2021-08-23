@@ -44,13 +44,13 @@ void main()
                 pid = wait(NULL);
                 if (pid == -1)
                 {
-                    perror("exec");
+                    perror("child");
                     exit(1);
                 }
                 pid = wait(NULL);
                 if (pid == -1)
                 {
-                    perror("exec");
+                    perror("child");
                     exit(1);
                 }
                 exit(0); //завершение 1 потомка
@@ -78,7 +78,7 @@ void main()
                 //завершение 5 потомка
                 if (pid == -1)
                 {
-                    perror("exec");
+                    perror("child");
                     exit(1);
                 }
                 exit(0); //завершение 4 потомка
@@ -88,13 +88,13 @@ void main()
             pid = wait(NULL);
             if (pid == -1)
             {
-                perror("exec");
+                perror("child");
                 exit(1);
             }
             pid = wait(NULL);
             if (pid == -1)
             {
-                perror("exec");
+                perror("child");
                 exit(1);
             }
             exit(0); //завершение родителя
