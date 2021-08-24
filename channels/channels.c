@@ -77,6 +77,8 @@ int main()
             //заменить стандартный вывод на файловый дискриптор
             close(1);
             dup2(file_pipes[1], 1);
+            close(file_pipes[0]);
+            close(file_pipes[1]);
             if (arg1[1][0] != '\0')
                 execlp(arg1[0], arg1[0], arg1[1], NULL);
             else
@@ -93,10 +95,14 @@ int main()
                 exit(1);
             }
 
-            //close(1);
-            //dup2(file_pipes[1], 1);
-            //const char buff = EOF;
-            //write(file_pipes[1], &buff, 1);
+            close(1);
+            dup2(file_pipes[1], 1);
+            close(file_pipes[0]);
+            close(file_pipes[1]);
+
+            const char buff = EOF;
+            lseek(file_pipes[1], 0, SEEK_END);
+            write(file_pipes[1], &buff, 1);
 
             //создаем 2 процесс в родительском
             pid2 = fork();
@@ -110,6 +116,8 @@ int main()
                 //заменить стандартный ввод на файловый дискриптор
                 close(0);
                 dup2(file_pipes[0], 0);
+                close(file_pipes[0]);
+                close(file_pipes[1]);
                 if (arg2[1][0] != '\0')
                     execlp(arg2[0], arg2[0], arg2[1], NULL);
                 else
