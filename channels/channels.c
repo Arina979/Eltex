@@ -84,6 +84,7 @@ int main()
         }
         else
         {
+            //ждем завершения 1 процесса
             int stat1;
             waitpid(pid1, &stat1, 0);
             if (stat1 == -1)
@@ -114,7 +115,7 @@ int main()
             }
             else
             {
-
+                //ждем завершения 2 процесса
                 int stat2;
                 waitpid(pid2, &stat2, 0);
                 if (stat2 == -1)
