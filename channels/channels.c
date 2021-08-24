@@ -58,6 +58,7 @@ int main()
             ptr = strtok(NULL, " \n");
         }
 
+        //создаем файловый дескриптор
         int file_pipes[2];
         if (pipe(file_pipes) != 0)
         {
