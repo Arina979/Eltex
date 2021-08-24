@@ -11,18 +11,11 @@ int main()
 {
     pid_t pid1;
     pid_t pid2;
-    int file_pipes[2];
 
     char buffer[255];
     char str[2][255];
     char arg1[10][10];
     char arg2[10][10];
-
-    if (pipe(file_pipes) != 0)
-    {
-        fprintf(stderr, "Pipe failure\n");
-        exit(EXIT_FAILURE);
-    }
 
     printf("FORMAT: command args1 | command2 args2\n");
 
@@ -65,6 +58,12 @@ int main()
             ptr = strtok(NULL, " \n");
         }
 
+        int file_pipes[2];
+        if (pipe(file_pipes) != 0)
+        {
+            fprintf(stderr, "Pipe failure\n");
+            exit(EXIT_FAILURE);
+        }
         //создаем 1 процесс в родительском
         pid1 = fork();
         if (pid1 == (pid_t)-1)
@@ -77,8 +76,6 @@ int main()
             //заменить стандартный вывод на файловый дискриптор
             close(1);
             dup2(file_pipes[1], 1);
-            close(file_pipes[0]);
-            close(file_pipes[1]);
             if (arg1[1][0] != '\0')
                 execlp(arg1[0], arg1[0], arg1[1], NULL);
             else
@@ -95,14 +92,7 @@ int main()
                 exit(1);
             }
 
-            close(1);
-            dup2(file_pipes[1], 1);
-            close(file_pipes[0]);
-            close(file_pipes[1]);
-
-            const char buff = EOF;
-            lseek(file_pipes[1], 0, SEEK_END);
-            write(file_pipes[1], &buff, 1);
+            close(file_pipes[1]);//EOF
 
             //создаем 2 процесс в родительском
             pid2 = fork();
@@ -116,8 +106,6 @@ int main()
                 //заменить стандартный ввод на файловый дискриптор
                 close(0);
                 dup2(file_pipes[0], 0);
-                close(file_pipes[0]);
-                close(file_pipes[1]);
                 if (arg2[1][0] != '\0')
                     execlp(arg2[0], arg2[0], arg2[1], NULL);
                 else
@@ -126,7 +114,7 @@ int main()
             }
             else
             {
-                /*
+
                 int stat2;
                 waitpid(pid2, &stat2, 0);
                 if (stat2 == -1)
@@ -134,10 +122,8 @@ int main()
                     perror("pid2");
                     exit(1);
                 }
-                */
             }
         }
     }
-
     return 0;
 }
