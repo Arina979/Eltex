@@ -16,6 +16,7 @@
 
 int server_fd;
 
+
 void close_fd()
 {
     close(server_fd);
@@ -30,7 +31,7 @@ int main()
         exit(1);
     }
 
-    // создание сокета
+    // создание сокета для подключения
     server_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (server_fd < 0)
     {
@@ -44,6 +45,49 @@ int main()
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = inet_addr(IP);
     serv_addr.sin_port = htons(PORT);
+    if (connect(server_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    {
+        perror("client: ERROR connecting");
+        close(server_fd);
+        exit(1);
+    }
+
+    // отправить приветственное сообщение
+    int n = send(server_fd, 0, 0, 0);
+    if (n < 0)
+    {
+        perror("client: ERROR on send");
+        close(server_fd);
+        exit(1);
+    }
+    printf("client: Welcome message from the client\n");
+
+    // получить порт
+    int port;
+    n = recv(server_fd, &port, sizeof(port), 0);
+    if (n < 0)
+    {
+        perror("client: ERROR on recv");
+        close(server_fd);
+        exit(1);
+    }
+    printf("client: Port received successfully: %d\n", port);
+
+    close(server_fd);
+
+    // создание сокета для общения
+    server_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (server_fd < 0)
+    {
+        perror("client: ERROR opening socket");
+        exit(1);
+    }
+
+    // подключиться к серверу
+    memset(&serv_addr, 0, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = inet_addr(IP);
+    serv_addr.sin_port = htons(port);
     if (connect(server_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
         perror("client: ERROR connecting");

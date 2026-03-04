@@ -29,7 +29,8 @@ char *strerror(int errno)
             printf("Allocation Failed");
             exit(EXIT_FAILURE);
         }
-        pthread_setspecific(key, (const void *)buf);//сохранить в базу указатель на ваше хранилище, вызывается один раз
+        //сохранить в базу указатель на ваше хранилище, вызывается один раз
+        pthread_setspecific(key, (const void *)buf);
     }
     
     switch (errno)

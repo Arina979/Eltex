@@ -171,7 +171,7 @@ int main()
 
     printf("Enter the byte number to change from 0 to 3: ");
 	byte_num = inputInt();
-	
+
 	//с помощью битовых операций
 	int ret1 = replaceByteUseBO(value, new_value, byte_num);
 	printBytesUseBO(ret1);

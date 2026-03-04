@@ -16,7 +16,8 @@
 #include <sys/time.h>
 
 #define IP "127.0.0.1"
-#define PORT 8080
+#define PORT_TCP 8080
+#define PORT_UDP 8081
 #define MAXLINE 256
 #define MAXEVENTS 64
 
@@ -92,12 +93,12 @@ int main()
         exit(1);
     }
     // привязать сокет к ip и port
-    struct sockaddr_in serv_addr;
-    memset(&serv_addr, 0, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr(IP);
-    serv_addr.sin_port = htons(PORT);
-    if (bind(sfd_tcp, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    struct sockaddr_in serv_addr_tcp;
+    memset(&serv_addr_tcp, 0, sizeof(serv_addr_tcp));
+    serv_addr_tcp.sin_family = AF_INET;
+    serv_addr_tcp.sin_addr.s_addr = inet_addr(IP);
+    serv_addr_tcp.sin_port = htons(PORT_TCP);
+    if (bind(sfd_tcp, (struct sockaddr *)&serv_addr_tcp, sizeof(serv_addr_tcp)) < 0)
     {
         perror("server: ERROR on binding1");
         exit(1);
@@ -126,7 +127,12 @@ int main()
         exit(1);
     }
     // привязать сокет к ip и port
-    if (bind(sfd_udp, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    struct sockaddr_in serv_addr_udp;
+    memset(&serv_addr_udp, 0, sizeof(serv_addr_udp));
+    serv_addr_udp.sin_family = AF_INET;
+    serv_addr_udp.sin_addr.s_addr = inet_addr(IP);
+    serv_addr_udp.sin_port = htons(PORT_UDP);
+    if (bind(sfd_udp, (struct sockaddr *)&serv_addr_udp, sizeof(serv_addr_udp)) < 0)
     {
         perror("server: ERROR on binding2");
         close(sfd_tcp);
