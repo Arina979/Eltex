@@ -20,7 +20,7 @@ void main()
     {
     case -1:
         perror("fork1");
-        exit(1);
+        pthread_exit(1);
     case 0:
         printf("CHILD 1: PID -- %d PPID -- %d\n", getpid(), getppid());
 
@@ -28,35 +28,35 @@ void main()
         {
         case -1:
             perror("fork2");
-            exit(1);
+            pthread_exit(1);
         case 0:
             printf("CHILD 2: PID -- %d PPID -- %d\n", getpid(), getppid());
-            exit(0);
+            pthread_exit(0);
         default:
             //1 процеесс-потомок
             switch (pid = fork())
             {
             case -1:
                 perror("fork3");
-                exit(1);
+                pthread_exit(1);
             case 0:
                 printf("CHILD 3: PID -- %d PPID -- %d\n", getpid(), getppid());
-                exit(0);
+                pthread_exit(0);
             default:
                 //завершение 2 и 3 потомка
                 pid = wait(NULL);
                 if (pid == -1)
                 {
                     perror("child");
-                    exit(1);
+                    pthread_exit(1);
                 }
                 pid = wait(NULL);
                 if (pid == -1)
                 {
                     perror("child");
-                    exit(1);
+                    pthread_exit(1);
                 }
-                exit(0); //завершение 1 потомка
+                pthread_exit(0); //завершение 1 потомка
             }
         }
     default:
@@ -66,25 +66,25 @@ void main()
         {
         case -1:
             perror("fork4");
-            exit(1);
+            pthread_exit(1);
         case 0:
             printf("CHILD 4: PID -- %d PPID -- %d\n", getpid(), getppid());
             switch (pid = fork())
             {
             case -1:
                 perror("fork5");
-                exit(1);
+                pthread_exit(1);
             case 0:
                 printf("CHILD 5: PID -- %d PPID -- %d\n", getpid(), getppid());
-                exit(0);
+                pthread_exit(0);
             default:
                 //завершение 5 потомка
                 if (pid == -1)
                 {
                     perror("child");
-                    exit(1);
+                    pthread_exit(1);
                 }
-                exit(0); //завершение 4 потомка
+                pthread_exit(0); //завершение 4 потомка
             }
         default:
             //завершение 1 и 4 потомка
@@ -92,15 +92,15 @@ void main()
             if (pid == -1)
             {
                 perror("child");
-                exit(1);
+                pthread_exit(1);
             }
             pid = wait(NULL);
             if (pid == -1)
             {
                 perror("child");
-                exit(1);
+                pthread_exit(1);
             }
-            exit(0); //завершение родителя
+            pthread_exit(0); //завершение родителя
         }
     }
 }

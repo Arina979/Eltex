@@ -29,7 +29,7 @@ void main()
         {
         case -1:
             perror("fork");
-            exit(1);
+            pthread_exit(1);
         case 0:
             if (!strcmp(buffer, "ls\n\0"))
             {
@@ -44,9 +44,9 @@ void main()
             if (pid == -1) 
             {
                 perror("exec");
-                exit(1);
+                pthread_exit(1);
             }
         }
     }
-    return;
+    return 0;
 }

@@ -17,12 +17,12 @@ void main()
     {
     case -1:
         perror("fork"); /* произошла ошибка */
-        exit(1);        /*выход из родительского процесса*/
+        pthread_exit(1); /*выход из родительского процесса*/
     case 0:
         printf("CHILD: Это процесс-потомок!\n");
         printf("CHILD: Мой PID -- %d\n", getpid());
         printf("CHILD: PID моего родителя -- %d\n", getppid());
-        exit(0);
+        pthread_exit(0);
     default:
         printf("PARENT: Это процесс-родитель!\n");
         printf("PARENT: Мой PID -- %d\n", getpid());
@@ -31,8 +31,8 @@ void main()
         if (pid == -1)
         {
             perror("wait");
-            exit(1);
+            pthread_exit(1);
         }
-        exit(0);
+        pthread_exit(0);
     }
 }
